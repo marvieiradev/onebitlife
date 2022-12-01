@@ -6,8 +6,10 @@ import { useNavigation } from "@react-navigation/native"
 
 export default function Start() {
 
+    const navigation = useNavigation();
+
     const handleNavAppExplanation = () => {
-        console.log("AAAAAAAAAAAAAAA");
+       navigation.navigate("AppExplanation");
     };
 
     return (
