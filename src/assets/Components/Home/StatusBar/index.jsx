@@ -22,13 +22,13 @@ export default function StatusBar(){
                 <View style={styles.stausBarContainer}>
                     <Image source={require("onebitlife/src/assets/icons/bodyIcon.png")}
                         style={styles.icon} />
-                        <ProgressBar progress={1} color={"#FF0044"} style={styles.progress}/>
+                        <ProgressBar progress={0} color={"#FF0044"} style={styles.progress}/>
                 </View>
 
                 <View style={styles.stausBarContainer}>
                     <Image source={require("onebitlife/src/assets/icons/funIcon.png")}
                         style={styles.icon} />
-                        <ProgressBar progress={1} color={"#FE7F23"} style={styles.progress}/>
+                        <ProgressBar progress={0} color={"#FE7F23"} style={styles.progress}/>
                 </View>
 
         </View>
