@@ -2,6 +2,7 @@ import React from "react";
 import LifeStatus from "onebitlife/src/assets/Components/Commun/LifeStatus/index.jsx"
 import { useNavigation } from "@react-navigation/native";
 import { View, ScrollView, Text, StyleSheet } from "react-native";
+import StatusBar from "../../assets/Components/Home/StatusBar";
 
 export default function Home() {
     const navigation = useNavigation();
@@ -20,6 +21,7 @@ export default function Home() {
                     </Text>
 
                     <LifeStatus />
+                    <StatusBar/>
                 </View>
 
                 <Text style={styles.explanationText}
