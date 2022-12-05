@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Image } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list"
 
-export default function SelectFrequency({ habitFrequency, frequncyInput }) {
+export default function SelectFrequency({ habitFrequency, frequencyInput }) {
 
     const [selected, setSelected] = useState(
         habitFrequency ? habitFrequency : "-"
@@ -15,7 +15,7 @@ export default function SelectFrequency({ habitFrequency, frequncyInput }) {
     ];
 
     useEffect(() => {
-        frequncyInput(habitFrequency ? habitFrequency : undefined);
+        frequencyInput(habitFrequency ? habitFrequency : undefined);
     }, []);
 
     return (
@@ -25,7 +25,7 @@ export default function SelectFrequency({ habitFrequency, frequncyInput }) {
                 data={data}
                 search={false}
                 onSelect={() => {
-                    frequncyInput(selected);
+                    frequencyInput(selected);
                 }}
                 placeholder={selected}
                 boxStyles={styles.boxStyle}
