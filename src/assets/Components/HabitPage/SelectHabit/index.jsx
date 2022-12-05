@@ -43,7 +43,6 @@ export default function SelectHabit({ habit, habitInput }) {
                 }}
                 placeholder={selected}
                 boxStyles={styles.boxStyle}
-
                 inputStyles={styles.inputStyle}
                 dropdownStyles={styles.dropdownStyle}
                 dropdownItemStyles={styles.dropdownItemStyle}

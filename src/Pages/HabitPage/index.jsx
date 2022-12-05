@@ -5,12 +5,15 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Alert } fr
 import SelectHabit from "../../assets/Components/HabitPage/SelectHabit";
 import SelectFrequency from "../../assets/Components/HabitPage/SelectFrequency";
 import Notification from "../../assets/Components/HabitPage/Notification"
+import TimeDataPicker from "../../assets/Components/TimeDataPicker";
 
 export default function HabitPage({ route }) {
     const navigation = useNavigation();
     const [habitInput, setHabitInput] = useState();
     const [frequencyInput, setFrequencyInput] = useState();
     const [notificationToggle, setNotificationToggle] = useState();
+    const [dayNotification, setDayNotification] = useState();
+    const [timeNotification, setTimeNotification] = useState();
     const { create, habit } = route.params;
 
     return (
@@ -43,9 +46,18 @@ export default function HabitPage({ route }) {
                                 setNotificationToggle={setNotificationToggle} />
                         )}
 
+                        {notificationToggle ? (
+                            frequencyInput === "Mensal" ? null : (
+                                <TimeDataPicker
+                                frequency={frequencyInput}
+                                dayNotification={dayNotification}
+                                setDayNotification={setDayNotification}
+                                setTimeNotification={setTimeNotification}
+                                />
+                            )
+                        ): null}
                     </View>
                 </View>
-
             </ScrollView>
         </View>
     );
