@@ -1,35 +1,21 @@
-import { useScrollToTop } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Image } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list"
-import HabitsData from "../../../Database/HabitsData";
 
-export default function SelectHabit({ habit, habitInput }) {
+export default function SelectFrequency({ habitFrequency, frequncyInput }) {
 
     const [selected, setSelected] = useState(
-        habit?.habitName ? habit.habitName : "-"
+        habitFrequency ? habitFrequency : "-"
     );
 
-    const [data, setData] = useState();
+    const data = [
+        { key: "Diário", value: "Diário" },
+        { key: "Semanal", value: "Semanal" },
+        { key: "Mensal", value: "Mensal" },
+    ];
 
     useEffect(() => {
-        if (habit?.habitArea === "Mente") {
-            setData(HabitsData.dataMind);
-        }
-
-        if (habit?.habitArea === "Financeiro") {
-            setData(HabitsData.dataMoney);
-        }
-
-        if (habit?.habitArea === "Corpo") {
-            setData(HabitsData.dataBody);
-        }
-
-        if (habit?.habitArea === "Humor") {
-            setData(HabitsData.dataFun);
-        }
-
-        habitInput(habit?.habitName ? habit?.habitName : undefined);
+        frequncyInput(habitFrequency ? habitFrequency : undefined);
     }, []);
 
     return (
@@ -39,11 +25,10 @@ export default function SelectHabit({ habit, habitInput }) {
                 data={data}
                 search={false}
                 onSelect={() => {
-                    habitInput(selected);
+                    frequncyInput(selected);
                 }}
                 placeholder={selected}
                 boxStyles={styles.boxStyle}
-
                 inputStyles={styles.inputStyle}
                 dropdownStyles={styles.dropdownStyle}
                 dropdownItemStyles={styles.dropdownItemStyle}
