@@ -6,6 +6,8 @@ import SelectHabit from "../../assets/Components/HabitPage/SelectHabit";
 import SelectFrequency from "../../assets/Components/HabitPage/SelectFrequency";
 import Notification from "../../assets/Components/HabitPage/Notification"
 import TimeDataPicker from "../../assets/Components/TimeDataPicker";
+import UpdadeExcludeButtons from "../../assets/Components/HabitPage/UpdateExcludeButtons"
+import DefaultButton from "../../assets/Components/Commun/DefaultButton"
 
 export default function HabitPage({ route }) {
     const navigation = useNavigation();
@@ -16,102 +18,157 @@ export default function HabitPage({ route }) {
     const [timeNotification, setTimeNotification] = useState();
     const { create, habit } = route.params;
 
-    return (
-        <View style={styles.container}>
-            <ScrollView>
-                <View>
-                    <TouchableOpacity
-                        style={styles.backPageBtn}
-                        onPress={() => navigation.goBack()}>
-                        <Image source={require("../../assets/icons/arrowBack.png")}
-                            style={styles.arrowBack} />
+    function handleCreateHabit() {
+        if (habitInput === undefined ||
+            frequencyInput === undefined) {
+            Alert.alert(
+                "Você precisa selecionar um hábito para continuar"
+            );
+        } else if (
+            notificationToggle === true &&
+            frequencyInput === "Diário" &&
+            timeNotification === undefined
+        ) {
+            Alert.alert("Você precisa informar o horário da notificação");
+        } else if (
+            notificationToggle === true &&
+            frequencyInput === "Diário" &&
+            dayNotification === undefined &&
+            timeNotification === undefined
+        ) {
+            Alert.alert("Você precisa informar a frequência e o horário da notificação");
+        } else {
+            navigation.navigate("Home", {
+                createHabit: `Created in ${habit?.habitArea}`,
+            });
+        }
 
-                    </TouchableOpacity>
-                    <View style={styles.mainContent}>
-                        <Text style={styles.title}>Configurações {"\n"} de hábito</Text>
-                        <Text style={styles.inputText}>Área</Text>
-                        <View style={styles.inputContainer}>
-                            <Text style={styles.area}>{habit?.habitArea}</Text>
-                        </View>
-                       
-                        <Text style={styles.inputText}>Hábito</Text>
-                        <SelectHabit habit={habit} habitInput={setHabitInput} />
-
-                        <Text style={styles.inputText}>Frequência</Text>
-                        <SelectFrequency habitFrequency={habit?.habitFrequency} frequencyInput={setFrequencyInput} />
-
-                        {frequencyInput === "Mensal" ? null : (
-                            <Notification
-                                notificationToggle={notificationToggle}
-                                setNotificationToggle={setNotificationToggle} />
-                        )}
-
-                        {notificationToggle ? (
-                            frequencyInput === "Mensal" ? null : (
-                                <TimeDataPicker
-                                frequency={frequencyInput}
-                                dayNotification={dayNotification}
-                                setDayNotification={setDayNotification}
-                                setTimeNotification={setTimeNotification}
-                                />
-                            )
-                        ): null}
-                    </View>
-                </View>
-            </ScrollView>
-        </View>
-    );
-}
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "rgba(21,21,21,0.98)"
-    },
-
-    backPageBtn: {
-        width: 40,
-        height: 40,
-        margin: 25,
-    },
-
-    arrowBack: {
-        width: 40,
-        height: 40,
-    },
-
-    mainContent: {
-        width: 250,
-        alignSelf: "center",
-    },
-
-    title: {
-        fontWeight: "bold",
-        textAlign: "center",
-        color: "#FFFFFF",
-        fontSize: 30,
-    },
-
-    inputText: {
-        color: "#FFFFFF",
-        fontSize: 16,
-        marginTop: 35,
-        marginBottom: 10,
-        marginLeft: 5,
-    },
-
-    inputContainer: {
-        borderWidth: 1,
-        borderColor: "#FFFFFF",
-        borderRadius: 10,
-        paddingHorizontal: 20,
-        paddingVertical: 15,
-    },
-
-    area: {
-        color: "#BBBBBB",
-        fontSize: 15,
     }
-});
+
+    function handleUpdateHabit() {
+        if (notificationToggle === true && !dayNotification && !timeNotification) {
+            Alert.alert("Você precisa informar a frequência e o horário da notificação");
+        } else {
+            navigation.navigate("Home", {
+                updateHabit: `Updated in ${habit?.habitArea}`,
+            }
+            );
+        }
+    }
+
+        return (
+            <View style={styles.container}>
+                <ScrollView>
+                    <View>
+                        <TouchableOpacity
+                            style={styles.backPageBtn}
+                            onPress={() => navigation.goBack()}>
+                            <Image source={require("../../assets/icons/arrowBack.png")}
+                                style={styles.arrowBack} />
+
+                        </TouchableOpacity>
+                        <View style={styles.mainContent}>
+                            <Text style={styles.title}>Configurações {"\n"} de hábito</Text>
+                            <Text style={styles.inputText}>Área</Text>
+                            <View style={styles.inputContainer}>
+                                <Text style={styles.area}>{habit?.habitArea}</Text>
+                            </View>
+
+                            <Text style={styles.inputText}>Hábito</Text>
+                            <SelectHabit habit={habit} habitInput={setHabitInput} />
+
+                            <Text style={styles.inputText}>Frequência</Text>
+                            <SelectFrequency habitFrequency={habit?.habitFrequency} frequencyInput={setFrequencyInput} />
+
+                            {frequencyInput === "Mensal" ? null : (
+                                <Notification
+                                    notificationToggle={notificationToggle}
+                                    setNotificationToggle={setNotificationToggle} />
+                            )}
+
+                            {notificationToggle ? (
+                                frequencyInput === "Mensal" ? null : (
+                                    <TimeDataPicker
+                                        frequency={frequencyInput}
+                                        dayNotification={dayNotification}
+                                        setDayNotification={setDayNotification}
+                                        setTimeNotification={setTimeNotification}
+                                    />
+                                )
+                            ) : null}
+
+                            {create == false ?(
+                                <UpdadeExcludeButtons
+                                handleUpdate={handleUpdateHabit}
+                                habitArea={habitArea}
+                                habitInput={habitInput}
+                                />
+                            ):(
+                                <View style={styles.configButton}>
+                                    <DefaultButton
+                                    buttonText={"Criar"}
+                                    handlePress={handleCreateHabit}
+                                    width={250}
+                                    height={50}
+                                    />
+                                </View>
+                            )}
+                        </View>
+                    </View>
+                </ScrollView>
+            </View>
+        );
+    }
+
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            backgroundColor: "rgba(21,21,21,0.98)"
+        },
+
+        backPageBtn: {
+            width: 40,
+            height: 40,
+            margin: 25,
+        },
+
+        arrowBack: {
+            width: 40,
+            height: 40,
+        },
+
+        mainContent: {
+            width: 250,
+            alignSelf: "center",
+        },
+
+        title: {
+            fontWeight: "bold",
+            textAlign: "center",
+            color: "#FFFFFF",
+            fontSize: 30,
+        },
+
+        inputText: {
+            color: "#FFFFFF",
+            fontSize: 16,
+            marginTop: 35,
+            marginBottom: 10,
+            marginLeft: 5,
+        },
+
+        inputContainer: {
+            borderWidth: 1,
+            borderColor: "#FFFFFF",
+            borderRadius: 10,
+            paddingHorizontal: 20,
+            paddingVertical: 15,
+        },
+
+        area: {
+            color: "#BBBBBB",
+            fontSize: 15,
+        }
+    });
 
 
