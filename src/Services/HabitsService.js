@@ -1,4 +1,4 @@
-import db from "../Database";
+import db from "onebitlife/src/assets/Database/index.jsx";
 
 db.transaction((tx) => {
   tx.executeSql(
