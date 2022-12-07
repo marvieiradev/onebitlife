@@ -5,18 +5,33 @@ import { View, ScrollView, Text, StyleSheet } from "react-native";
 import StatusBar from "../../assets/Components/Home/StatusBar";
 import CreateHabit from "../../assets/Components/Home/CreateHabit";
 import EditHabit from "../../assets/Components/Home/EditHabit";
+import ChangeNavigationService from "onebitlife/src/Services/ChangeNavigationService.js";
 
-export default function Home() {
+
+export default function Home({ route }) {
     const navigation = useNavigation();
 
     const [mindHabit, setMindHabit] = useState();
     const [moneyHabit, setMoneyHabit] = useState();
     const [bodyHabit, setBodyHabit] = useState();
     const [funHabit, setFunHabit] = useState();
+    const [robotDaysLife, setRobotDaysLife] = useState();
+    const today = new Date();
 
     function handleNavExplanation() {
         navigation.navigate("AppExplanation");
     }
+
+    useEffect(() => {
+        ChangeNavigationService.checkShowHome(1)
+            .then((showHome) => {
+                const formDate = `${today.getFullYear()}-${today.getMonth().toString().padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
+                const checkDays = new Date(formDate) - new Date(showHome.appStartData) + 1;
+                setRobotDaysLife(checkDays.toString().padStart(2, "0"));
+
+            })
+            .catch((err) => console.log(err));
+    }, [route.params]);
 
     return (
         <View style={styles.container}>
@@ -24,7 +39,7 @@ export default function Home() {
                 <View style={{ alignItems: "center" }}>
 
                     <Text style={styles.dailyChecks}>
-                        ❤ 20 dias  -  ✔ 80 checks
+                        ❤ {robotDaysLife} {robotDaysLife === "01" ? "dia" : "dias"}  -  ✔ 80 checks
                     </Text>
 
                     <LifeStatus />

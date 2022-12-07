@@ -12,7 +12,7 @@ export default function AppExplanation() {
     const navigation = useNavigation();
     const [showHome, setShowHome] = useState("false");
     const startDate = new Date();
-    const appStartData = `${startDate.getFullYear()}-${startDate.getMonth()}-${startDate.getDate()}`;
+    const appStartData = `${startDate.getFullYear()}-${startDate.getMonth().toString().padStart(2, "0")}-${startDate.getDate().toString().padStart(2, "0")}`;
 
     function handleNavHome() {
         navigation.navigate("Home");
