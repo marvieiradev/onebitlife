@@ -66,14 +66,29 @@ export default function HabitPage({ route }) {
 
     function handleUpdateHabit() {
         if (notificationToggle === true && !dayNotification && !timeNotification) {
-            Alert.alert("Você precisa informar a frequência e o horário da notificação");
-        } else {
-            navigation.navigate("Home", {
-                updateHabit: `Updated in ${habit?.habitArea}`,
+          Alert.alert("Você precisa informar a frequência e o horário da notificação");
+            } else {
+          HabitsService.updateHabit({
+            habitArea: habit?.habitArea,
+            habitName: habitInput,
+            habitFrequency: frequencyInput,
+            habitHasNotification: notificationToggle,
+            habitNotificationFrequency: dayNotification,
+            habitNotificationTime: timeNotification,
+            habitNotificationId: notificationToggle ? habitInput : null,
+          }).then(() => {
+            Alert.alert("Sucesso na atualização do hábito");
+            if (!notificationToggle) {
+            
+            } else {
+         
             }
-            );
+            navigation.navigate("Home", {
+              updatedHabit: `Updated in ${habit?.habitArea}`,
+            });
+          });
         }
-    }
+      }
 
     return (
         <View style={styles.container}>
@@ -119,7 +134,7 @@ export default function HabitPage({ route }) {
                         {create == false ? (
                             <UpdadeExcludeButtons
                                 handleUpdate={handleUpdateHabit}
-                                habitArea={habitArea}
+                                habitArea={habit?.habitArea}
                                 habitInput={habitInput}
                             />
                         ) : (
