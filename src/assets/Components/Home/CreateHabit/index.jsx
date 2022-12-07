@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import HabitsService from "../../../../Services/HabitsService"
 
 export default function CreateHabit({ habitArea, borderColor }) {
 

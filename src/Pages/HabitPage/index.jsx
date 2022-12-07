@@ -8,7 +8,7 @@ import Notification from "../../assets/Components/HabitPage/Notification"
 import TimeDataPicker from "../../assets/Components/TimeDataPicker";
 import UpdadeExcludeButtons from "../../assets/Components/HabitPage/UpdateExcludeButtons"
 import DefaultButton from "../../assets/Components/Commun/DefaultButton"
-import HabitsceclearService from "../../Services/HabitsService";
+import HabitsService from "../../Services/HabitsService";
 
 export default function HabitPage({ route }) {
     const navigation = useNavigation();
