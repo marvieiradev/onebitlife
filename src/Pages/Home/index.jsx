@@ -7,6 +7,7 @@ import StatusBar from "../../assets/Components/Home/StatusBar";
 import CreateHabit from "../../assets/Components/Home/CreateHabit";
 import EditHabit from "../../assets/Components/Home/EditHabit";
 import ChangeNavigationService from "onebitlife/src/Services/ChangeNavigationService.js";
+import CheckService from "onebitlife/src/Services/CheckService.js";
 
 
 export default function Home({ route }) {
@@ -63,6 +64,10 @@ export default function Home({ route }) {
             })
             .catch((err) => console.log(err));
     }, [route.params]);
+
+    useEffect(() => {
+        CheckService.removeCheck(mindHabit, moneyHabit, bodyHabit, funHabit);
+    }, [mindHabit, moneyHabit, bodyHabit, funHabit]);
 
     return (
         <View style={styles.container}>
