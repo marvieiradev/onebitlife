@@ -54,10 +54,6 @@ export default function Home({ route }) {
             }
         }
 
-
-
-
-
         ChangeNavigationService.checkShowHome(1)
             .then((showHome) => {
                 const formDate = `${today.getFullYear()}-${today.getMonth().toString().padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;

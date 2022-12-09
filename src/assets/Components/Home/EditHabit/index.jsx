@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, TouchableOpacity, View, Alert, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native"
 import HabitsService from "../../../../Services/HabitsService"
+import CheckService from "onebitlife/src/Services/CheckService.js";
 
 export default function EditHabit({ habit, frequency, habitArea, checkColor }) {
     const navigation = useNavigation();
@@ -9,6 +10,10 @@ export default function EditHabit({ habit, frequency, habitArea, checkColor }) {
     const [checkImage, setCheckImage] = useState(
         require("onebitlife/src/assets/icons/Mind.png")
     );
+
+    const checkData = new Date();
+    const formatDate = `${checkData.getFullYear()}-${checkData.getMonth()}-${checkData.getDate()}`;
+
     function handleEdit() {
         navigation.navigate("HabitPage", {
             create: false,
@@ -18,6 +23,12 @@ export default function EditHabit({ habit, frequency, habitArea, checkColor }) {
 
     function handleCheck() {
         if (habitCheck === 0) {
+            CheckService.checkHabit({
+                lastCheck: formatDate,
+                habitIsChecked: 1,
+                habitChecks: habit?.habitChecks + 1,
+                habitArea: habit?.habitArea,
+            });
             setHabitCheck(1);
         }
     }
@@ -99,5 +110,5 @@ const styles = StyleSheet.create({
     checked: {
         width: 25,
         height: 25,
-      },
+    },
 });
