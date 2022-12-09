@@ -1,17 +1,24 @@
 import React from "react";
 import { Alert, TouchableOpacity, View, Image, StyleSheet, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import HabitsService from "onebitlife/src/Services/HabitsService.js";
 
 export default function UpdateExcludeButtons({
     habitInput, handleUpdate, habitArea,
 }) {
     const navigation = useNavigation();
 
-    function handleDeleteHabit(){
-        navigation.navigate("Home", {
-            excludeArea: `${habitArea}`,
-        })
+    function handleDeleteHabit() {
+        HabitsService.deleteByName(habitArea)
+            .then(() => {
+                Alert.alert("Exclusão feita com sucesso");
+                navigation.navigate("Home", {
+                    excludeArea: `${habitArea}`,
+                });
+            })
+            .catch((err) => console.log(err));
     }
+
     return (
         <View style={styles.container}>
             <TouchableOpacity
@@ -65,8 +72,8 @@ export default function UpdateExcludeButtons({
 }
 
 const styles = StyleSheet.create({
-    container:{
-        flexDirection:"row",
+    container: {
+        flexDirection: "row",
         marginBottom: 20,
 
     },
@@ -93,7 +100,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: "center",
         justifyContent: "center",
-        width: 90, 
+        width: 90,
     },
 
     trashIcon: {

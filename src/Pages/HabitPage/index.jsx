@@ -1,5 +1,6 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
+import * as Notifications from "expo-notifications";
 import { useNavigation } from "@react-navigation/native";
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Alert } from "react-native";
 import SelectHabit from "../../assets/Components/HabitPage/SelectHabit";
@@ -9,6 +10,14 @@ import TimeDataPicker from "../../assets/Components/TimeDataPicker";
 import UpdadeExcludeButtons from "../../assets/Components/HabitPage/UpdateExcludeButtons"
 import DefaultButton from "../../assets/Components/Commun/DefaultButton"
 import HabitsService from "../../Services/HabitsService";
+
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: false,
+    })
+})
 
 export default function HabitPage({ route }) {
     const navigation = useNavigation();
@@ -21,6 +30,10 @@ export default function HabitPage({ route }) {
 
     const HabitCreated = new Date();
     const formatDate = `${HabitCreated.getFullYear}-${HabitCreated.getMonth() + 1}-${HabitCreated.getDate()}`;
+
+    const [notification, setNotification] = useState(false);
+    const notificationListener = useRef();
+    const responseListener = useRef();
 
     function handleCreateHabit() {
         if (habitInput === undefined ||
@@ -66,143 +79,173 @@ export default function HabitPage({ route }) {
 
     function handleUpdateHabit() {
         if (notificationToggle === true && !dayNotification && !timeNotification) {
-          Alert.alert("Você precisa informar a frequência e o horário da notificação");
-            } else {
-          HabitsService.updateHabit({
-            habitArea: habit?.habitArea,
-            habitName: habitInput,
-            habitFrequency: frequencyInput,
-            habitHasNotification: notificationToggle,
-            habitNotificationFrequency: dayNotification,
-            habitNotificationTime: timeNotification,
-            habitNotificationId: notificationToggle ? habitInput : null,
-          }).then(() => {
-            Alert.alert("Sucesso na atualização do hábito");
-            if (!notificationToggle) {
-            
-            } else {
-         
-            }
-            navigation.navigate("Home", {
-              updatedHabit: `Updated in ${habit?.habitArea}`,
+            Alert.alert("Você precisa informar a frequência e o horário da notificação");
+        } else {
+            HabitsService.updateHabit({
+                habitArea: habit?.habitArea,
+                habitName: habitInput,
+                habitFrequency: frequencyInput,
+                habitHasNotification: notificationToggle,
+                habitNotificationFrequency: dayNotification,
+                habitNotificationTime: timeNotification,
+                habitNotificationId: notificationToggle ? habitInput : null,
+            }).then(() => {
+                Alert.alert("Sucesso na atualização do hábito");
+                if (!notificationToggle) {
+
+                } else {
+
+                }
+                navigation.navigate("Home", {
+                    updatedHabit: `Updated in ${habit?.habitArea}`,
+                });
             });
-          });
         }
-      }
+    }
 
-    return (
-        <View style={styles.container}>
-            <ScrollView>
-                <View>
-                    <TouchableOpacity
-                        style={styles.backPageBtn}
-                        onPress={() => navigation.goBack()}>
-                        <Image source={require("../../assets/icons/arrowBack.png")}
-                            style={styles.arrowBack} />
+    useEffect(() => {
+        if (habit?.habitHasNotification == 1) {
+            setNotificationToggle(true);
+            setDayNotification(habit?.habitNotificationFrequency);
+            setTimeNotification(habit?.habitNotificationTime);
+        }
+    }, []);
 
-                    </TouchableOpacity>
-                    <View style={styles.mainContent}>
-                        <Text style={styles.title}>Configurações {"\n"} de hábito</Text>
-                        <Text style={styles.inputText}>Área</Text>
-                        <View style={styles.inputContainer}>
-                            <Text style={styles.area}>{habit?.habitArea}</Text>
-                        </View>
+    useEffect(() => {
+        if (notificationToggle === false) {
+            setTimeNotification(null);
+            setDayNotification(null);
+        }
+    }, [notificationToggle]);
 
-                        <Text style={styles.inputText}>Hábito</Text>
-                        <SelectHabit habit={habit} habitInput={setHabitInput} />
+    useEffect(() => {
+        notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
+            setNotification(notification);
+        });
 
-                        <Text style={styles.inputText}>Frequência</Text>
-                        <SelectFrequency habitFrequency={habit?.habitFrequency} frequencyInput={setFrequencyInput} />
+        responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
+            console.log(response);
+        });
 
-                        {frequencyInput === "Mensal" ? null : (
-                            <Notification
-                                notificationToggle={notificationToggle}
-                                setNotificationToggle={setNotificationToggle} />
-                        )}
+        return () => {
+            Notifications.removeNotificationSubscription(notificationListener.current);
+            Notifications.removeNotificationSubscription(responseListener.current);
+          };
+        }, []);
 
-                        {notificationToggle ? (
-                            frequencyInput === "Mensal" ? null : (
-                                <TimeDataPicker
-                                    frequency={frequencyInput}
-                                    dayNotification={dayNotification}
-                                    setDayNotification={setDayNotification}
-                                    setTimeNotification={setTimeNotification}
-                                />
-                            )
-                        ) : null}
+        return (
+            <View style={styles.container}>
+                <ScrollView>
+                    <View>
+                        <TouchableOpacity
+                            style={styles.backPageBtn}
+                            onPress={() => navigation.goBack()}>
+                            <Image source={require("../../assets/icons/arrowBack.png")}
+                                style={styles.arrowBack} />
 
-                        {create == false ? (
-                            <UpdadeExcludeButtons
-                                handleUpdate={handleUpdateHabit}
-                                habitArea={habit?.habitArea}
-                                habitInput={habitInput}
-                            />
-                        ) : (
-                            <View style={styles.configButton}>
-                                <DefaultButton
-                                    buttonText={"Criar"}
-                                    handlePress={handleCreateHabit}
-                                    width={250}
-                                    height={50}
-                                />
+                        </TouchableOpacity>
+                        <View style={styles.mainContent}>
+                            <Text style={styles.title}>Configurações {"\n"} de hábito</Text>
+                            <Text style={styles.inputText}>Área</Text>
+                            <View style={styles.inputContainer}>
+                                <Text style={styles.area}>{habit?.habitArea}</Text>
                             </View>
-                        )}
+
+                            <Text style={styles.inputText}>Hábito</Text>
+                            <SelectHabit habit={habit} habitInput={setHabitInput} />
+
+                            <Text style={styles.inputText}>Frequência</Text>
+                            <SelectFrequency habitFrequency={habit?.habitFrequency} frequencyInput={setFrequencyInput} />
+
+                            {frequencyInput === "Mensal" ? null : (
+                                <Notification
+                                    notificationToggle={notificationToggle}
+                                    setNotificationToggle={setNotificationToggle} />
+                            )}
+
+                            {notificationToggle ? (
+                                frequencyInput === "Mensal" ? null : (
+                                    <TimeDataPicker
+                                        frequency={frequencyInput}
+                                        dayNotification={dayNotification}
+                                        setDayNotification={setDayNotification}
+                                        setTimeNotification={setTimeNotification}
+                                    />
+                                )
+                            ) : null}
+
+                            {create == false ? (
+                                <UpdadeExcludeButtons
+                                    handleUpdate={handleUpdateHabit}
+                                    habitArea={habit?.habitArea}
+                                    habitInput={habitInput}
+                                />
+                            ) : (
+                                <View style={styles.configButton}>
+                                    <DefaultButton
+                                        buttonText={"Criar"}
+                                        handlePress={handleCreateHabit}
+                                        width={250}
+                                        height={50}
+                                    />
+                                </View>
+                            )}
+                        </View>
                     </View>
-                </View>
-            </ScrollView>
-        </View>
-    );
-}
+                </ScrollView>
+            </View>
+        );
+    }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "rgba(21,21,21,0.98)"
-    },
+        container: {
+            flex: 1,
+            backgroundColor: "rgba(21,21,21,0.98)"
+        },
 
-    backPageBtn: {
-        width: 40,
-        height: 40,
-        margin: 25,
-    },
+        backPageBtn: {
+            width: 40,
+            height: 40,
+            margin: 25,
+        },
 
-    arrowBack: {
-        width: 40,
-        height: 40,
-    },
+        arrowBack: {
+            width: 40,
+            height: 40,
+        },
 
-    mainContent: {
-        width: 250,
-        alignSelf: "center",
-    },
+        mainContent: {
+            width: 250,
+            alignSelf: "center",
+        },
 
-    title: {
-        fontWeight: "bold",
-        textAlign: "center",
-        color: "#FFFFFF",
-        fontSize: 30,
-    },
+        title: {
+            fontWeight: "bold",
+            textAlign: "center",
+            color: "#FFFFFF",
+            fontSize: 30,
+        },
 
-    inputText: {
-        color: "#FFFFFF",
-        fontSize: 16,
-        marginTop: 35,
-        marginBottom: 10,
-        marginLeft: 5,
-    },
+        inputText: {
+            color: "#FFFFFF",
+            fontSize: 16,
+            marginTop: 35,
+            marginBottom: 10,
+            marginLeft: 5,
+        },
 
-    inputContainer: {
-        borderWidth: 1,
-        borderColor: "#FFFFFF",
-        borderRadius: 10,
-        paddingHorizontal: 20,
-        paddingVertical: 15,
-    },
+        inputContainer: {
+            borderWidth: 1,
+            borderColor: "#FFFFFF",
+            borderRadius: 10,
+            paddingHorizontal: 20,
+            paddingVertical: 15,
+        },
 
-    area: {
-        color: "#BBBBBB",
-        fontSize: 15,
-    }
-});
+        area: {
+            color: "#BBBBBB",
+            fontSize: 15,
+        }
+    });
 
 
