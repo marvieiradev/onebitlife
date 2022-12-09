@@ -41,18 +41,18 @@ export default function Home({ route }) {
 
         if (excludeArea) {
             if (excludeArea == "Mente") {
-              setMindHabit(null);
+                setMindHabit(null);
             }
             if (excludeArea == "Financeiro") {
-              setMoneyHabit(null);
+                setMoneyHabit(null);
             }
             if (excludeArea == "Corpo") {
-              setBodyHabit(null);
+                setBodyHabit(null);
             }
             if (excludeArea == "Humor") {
-              setFunHabit(null);
+                setFunHabit(null);
             }
-          }
+        }
 
 
 
@@ -78,7 +78,12 @@ export default function Home({ route }) {
                     </Text>
 
                     <LifeStatus />
-                    <StatusBar />
+                    <StatusBar
+                        mindHabit={mindHabit?.progressBar}
+                        moneyHabit={moneyHabit?.progressBar}
+                        bodyHabit={bodyHabit?.progressBar}
+                        funHabit={funHabit?.progressBar}
+                    />
 
                     {mindHabit ? (
                         <EditHabit habit={mindHabit} checkColor="#90B7F3" />

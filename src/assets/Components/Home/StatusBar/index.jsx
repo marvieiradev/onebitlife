@@ -1,35 +1,40 @@
 import React from "react";
-import {ProgressBar} from "react-native-paper"
+import { ProgressBar } from "react-native-paper"
 import { View, StyleSheet, Image } from "react-native";
 
-export default function StatusBar(){
+export default function StatusBar({
+    mindHabit,
+    moneyHabit,
+    bodyHabit,
+    funHabit,
+}) {
 
-    return(
+    return (
 
         <View style={styles.container}>
-                <View style={styles.stausBarContainer}>
-                    <Image source={require("onebitlife/src/assets/icons/educationIcon.png")}
-                        style={styles.icon} />
-                        <ProgressBar progress={1} color={"#90B7F3"} style={styles.progress}/>
-                </View>
+            <View style={styles.stausBarContainer}>
+                <Image source={require("onebitlife/src/assets/icons/educationIcon.png")}
+                    style={styles.icon} />
+                <ProgressBar progress={mindHabit} color={"#90B7F3"} style={styles.progress} />
+            </View>
 
-                <View style={styles.stausBarContainer}>
-                    <Image source={require("onebitlife/src/assets/icons/moneyIcon.png")}
-                        style={styles.icon} />
-                        <ProgressBar progress={0} color={"#85BB65"} style={styles.progress}/>
-                </View>
+            <View style={styles.stausBarContainer}>
+                <Image source={require("onebitlife/src/assets/icons/moneyIcon.png")}
+                    style={styles.icon} />
+                <ProgressBar progress={moneyHabit} color={"#85BB65"} style={styles.progress} />
+            </View>
 
-                <View style={styles.stausBarContainer}>
-                    <Image source={require("onebitlife/src/assets/icons/bodyIcon.png")}
-                        style={styles.icon} />
-                        <ProgressBar progress={0} color={"#FF0044"} style={styles.progress}/>
-                </View>
+            <View style={styles.stausBarContainer}>
+                <Image source={require("onebitlife/src/assets/icons/bodyIcon.png")}
+                    style={styles.icon} />
+                <ProgressBar progress={bodyHabit} color={"#FF0044"} style={styles.progress} />
+            </View>
 
-                <View style={styles.stausBarContainer}>
-                    <Image source={require("onebitlife/src/assets/icons/funIcon.png")}
-                        style={styles.icon} />
-                        <ProgressBar progress={0} color={"#FE7F23"} style={styles.progress}/>
-                </View>
+            <View style={styles.stausBarContainer}>
+                <Image source={require("onebitlife/src/assets/icons/funIcon.png")}
+                    style={styles.icon} />
+                <ProgressBar progress={funHabit} color={"#FE7F23"} style={styles.progress} />
+            </View>
 
         </View>
     );
