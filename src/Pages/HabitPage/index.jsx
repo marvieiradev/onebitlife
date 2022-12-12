@@ -30,7 +30,7 @@ export default function HabitPage({ route }) {
     const { create, habit } = route.params;
 
     const HabitCreated = new Date();
-    const formatDate = `${HabitCreated.getFullYear}-${HabitCreated.getMonth() + 1}-${HabitCreated.getDate()}`;
+    const formatDate = `${HabitCreated.getFullYear}-${HabitCreated.getMonth()}-${HabitCreated.getDate()}`;
 
     const [notification, setNotification] = useState(false);
     const notificationListener = useRef();
