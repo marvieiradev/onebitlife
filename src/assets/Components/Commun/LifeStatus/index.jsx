@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     container: {
         width: 300,
         height: 300,
+        alignItems: "center"
     },
     roboAnimacao: {
         width: 190,
@@ -57,14 +58,14 @@ const styles = StyleSheet.create({
     educacaoAnimacao: {
         width: 100,
         marginTop: 50,
-        marginLeft: -20,
+        marginLeft: -80,
         position: "absolute",
     },
 
     financasAnimacao: {
         width: 100,
         marginTop: 50,
-        marginLeft: 70,
+        marginLeft: 80,
         position: "absolute",
     },
 });

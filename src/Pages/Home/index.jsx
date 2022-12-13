@@ -160,14 +160,6 @@ export default function Home({ route }) {
                                 <CreateHabit habitArea="Humor" borderColor="#FE7F23" />
                             )}
 
-                            <Text
-                                style={styles.explanationText}
-                                onPress={() => {
-                                    handleNavExplanation();
-                                }}
-                            >
-                                Ver explicações novamente
-                            </Text>
                         </View>
 
                     ) : (
